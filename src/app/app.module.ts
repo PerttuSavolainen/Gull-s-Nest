@@ -4,6 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import {AngularFireModule, AuthProviders, AuthMethods} from "angularfire2";
+
+export const fireBaseConfig = {
+  apiKey: "AIzaSyCMLXHDso7niqEQFV2XTVChk-PtpJimuaw",
+  authDomain: "gulls-nest.firebaseapp.com",
+  databaseURL: "https://gulls-nest.firebaseio.com",
+  storageBucket: "gulls-nest.appspot.com",
+  messagingSenderId: "995073188328"
+};
+
+const firebaseAuthConfig = {
+  provider: AuthProviders.Google,
+  method: AuthMethods.Redirect
+};
 
 @NgModule({
   declarations: [
@@ -12,7 +26,8 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AngularFireModule.initializeApp(fireBaseConfig, firebaseAuthConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]
