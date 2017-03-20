@@ -12,11 +12,12 @@ export class AppComponent {
   constructor() {}
 
   handleDrop(e) {
+
     let files:File = e.dataTransfer.files;
-    let self = this;
+
     Object.keys(files).forEach((key) => {
       if(files[key].type === "image/png" || files[key].type === "image/jpeg") {
-        self.images.push(files[key]);
+        this.images.push(files[key]);
       }
       else {
         alert("File must be a PNG or JPEG!");
