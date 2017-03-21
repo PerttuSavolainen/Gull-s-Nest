@@ -3,15 +3,15 @@
   <button (click)="login()">Login</button>
   <button (click)="logout()">Logout</button>
 
-  <h2>{{ activeUser?.displayName }}
-  <span *ngIf="activeUser?.photoUrl">
-    <img [src]="activeUser?.photoUrl" style="max-width: 100px; border-radius: 50%;">
+  <h2>{{ authenticationService?.getActiveUser()?.displayName }}
+  <span *ngIf="authenticationService?.getActiveUser()?.photoUrl">
+    <img [src]="authenticationService?.getActiveUser()?.photoUrl" style="max-width: 100px; border-radius: 50%;">
   </span>
   </h2>
 
   <div class="media" *ngFor="let image of images">
     <div class="media-left">
-      <a href="#">
+      <a [href]="image.path" (click)="preview($event)">
         <img class="media-object" src="{{ image.path }}" style="max-width:200px">
       </a>
     </div>

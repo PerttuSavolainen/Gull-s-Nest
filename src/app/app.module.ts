@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {AngularFireModule, AuthProviders, AuthMethods} from "angularfire2";
+import {AuthenticationService} from "./authentication.service";
 
 export const fireBaseConfig = {
   apiKey: "AIzaSyCMLXHDso7niqEQFV2XTVChk-PtpJimuaw",
@@ -29,7 +30,7 @@ const firebaseAuthConfig = {
     HttpModule,
     AngularFireModule.initializeApp(fireBaseConfig, firebaseAuthConfig)
   ],
-  providers: [],
+  providers: [AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
