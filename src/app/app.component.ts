@@ -9,8 +9,7 @@ import {User, AuthenticationService} from "./authentication.service";
 })
 export class AppComponent implements OnInit {
 
-  images:Array<Object> = [];
-  items: FirebaseListObservable<any[]>;
+  files: FirebaseListObservable<any[]>;
 
   constructor(private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any, public authenticationService: AuthenticationService) {
 
@@ -34,15 +33,13 @@ export class AppComponent implements OnInit {
 
         this.authenticationService.setActiveUser(act);
 
-        // load user files
-        this.af.database.list('/files', {
+        // create realtime database list,
+        // it updates itself when data is added/removed/updated
+        this.files = this.af.database.list('/files', {
           query: {
             orderByChild: 'refUserId',
             equalTo: this.authenticationService.getActiveUser().uid
           }
-        }).subscribe(res => {
-            console.log(res);
-           this.images = res;
         });
 
       } else {
@@ -100,7 +97,7 @@ export class AppComponent implements OnInit {
               let files = this.af.database.list('/files');
 
               files.push(file).then(() => {
-                this.images.push(file);
+
               }).catch(error => {
                 // TODO create something  valid here
                 console.error(error)

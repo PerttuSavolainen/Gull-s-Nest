@@ -9,7 +9,7 @@
   </span>
   </h2>
 
-  <div class="media" *ngFor="let image of images">
+  <div class="media" *ngFor="let image of images | async">
     <div class="media-left">
       <a [href]="image.path" (click)="preview($event)">
         <img class="media-object" src="{{ image.path }}" style="max-width:200px">
