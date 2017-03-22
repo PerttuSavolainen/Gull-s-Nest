@@ -5,7 +5,7 @@ import {User, AuthenticationService} from "./authentication.service";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -16,11 +16,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.af.auth.subscribe((auth: FirebaseAuthState) => {
-
       if (auth) {
-
         // login happened
         console.log("Login happened...");
         console.log(auth);
@@ -33,7 +30,6 @@ export class AppComponent implements OnInit {
         act.uid = user.uid;
 
         this.authenticationService.setActiveUser(act);
-
         // create realtime database list,
         // it updates itself when data is added/removed/updated
         this.files = this.af.database.list('/files', {
