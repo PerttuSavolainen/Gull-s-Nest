@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     this.af.auth.subscribe((auth: FirebaseAuthState) => {
       if (auth) {
         // login happened
-        console.log("Login happened...");
+        console.log('Login happened...');
         console.log(auth);
 
         let act: User = {};
@@ -52,10 +52,6 @@ export class AppComponent implements OnInit {
     const storageRef = this.firebaseApp.storage().ref();
     console.log(storageRef);
 
-  }
-
-  login() {
-    this.af.auth.login();
   }
 
   logout(){

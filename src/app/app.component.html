@@ -1,6 +1,9 @@
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
+
 <div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
 
-  <button class="" (click)="login()">Login</button>
   <button class="" (click)="logout()">Logout</button>
 
   <h2>{{ authenticationService?.getActiveUser()?.displayName }}
