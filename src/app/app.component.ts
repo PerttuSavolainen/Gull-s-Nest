@@ -85,9 +85,9 @@ export class AppComponent implements OnInit {
         let lastDotIndex = name.lastIndexOf("."); // get last dot position
         let newName = name.slice(0, lastDotIndex) + "_" + this.generateNonce(20) + name.slice(lastDotIndex);
 
-        let imageref = storageRef.child(newName);
+        let fileRef = storageRef.child(newName);
 
-        imageref.put(files[key]).then(snapshot => {
+        fileRef.put(files[key]).then(snapshot => {
 
           console.log(snapshot);
 
