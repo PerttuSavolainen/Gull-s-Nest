@@ -2,11 +2,23 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {AngularFire, FirebaseListObservable, FirebaseApp, FirebaseAuthState} from "angularfire2";
 import {User, AuthenticationService} from "./authentication.service";
 
+export interface File {
+  name: string,
+  path: string,
+  size: number,
+  refUserId: string
+}
+
+export interface FbFile extends File {
+  $key: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit {
 
   files: FirebaseListObservable<any[]>;
@@ -47,14 +59,9 @@ export class AppComponent implements OnInit {
         // logout or not signed in happened
         this.authenticationService.setActiveUser(null);
         this.files = null;
-
       }
 
     });
-
-    // TODO load user's files
-    const storageRef = this.firebaseApp.storage().ref();
-    console.log(storageRef);
 
   }
 
@@ -69,7 +76,7 @@ export class AppComponent implements OnInit {
   handleDrop(e) {
 
     let files:File = e.dataTransfer.files;
-    const storageRef = this.firebaseApp.storage().ref();
+    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
 
     Object.keys(files).forEach((key) => {
       if(files[key].type === "image/png" || files[key].type === "image/jpeg") {
@@ -89,7 +96,10 @@ export class AppComponent implements OnInit {
             // TODO handle different scenarios
             if (snapshot.a && snapshot.f === "success") {
 
-              let file: Object = {
+              // TODO get path that needs authentication,
+              // snapshot.a.downloadURLs[0] is accessible for everyone
+
+              let file: File = {
                 name: snapshot.a.name,
                 path: snapshot.a.downloadURLs[0],
                 size: snapshot.a.size,
@@ -108,7 +118,6 @@ export class AppComponent implements OnInit {
             }
 
           }
-
 
         }).catch(error => {
 
@@ -150,6 +159,31 @@ export class AppComponent implements OnInit {
 
     e.preventDefault();
     // TODO send link of preview to child directive
+
+  }
+
+  deleteFile(file: FbFile){
+
+    console.log(file);
+
+    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
+    let fileRef = storageRef.child(file.name);
+
+    fileRef.delete().then(() => {
+
+      // file deleted successfully,
+      // next delete database reference
+      this.files.remove(file.$key).then(() => {
+        console.log("File deleted successfully");
+      }).catch(error => {
+        console.error(error);
+      });
+
+    }).catch(error => {
+      // TODO inform the user about error
+      console.error(error);
+    });
+
 
   }
 
