@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
 
         // login happened
         console.log("Login happened...");
+        console.log(auth);
 
         let act: User = {};
         let user = auth.auth;
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
       } else {
         // logout or not signed in happened
         this.authenticationService.setActiveUser(null);
+        this.files = null;
 
       }
 

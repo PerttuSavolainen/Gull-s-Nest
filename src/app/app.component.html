@@ -9,15 +9,15 @@
   </span>
   </h2>
 
-  <div class="media" *ngFor="let image of images | async">
+  <div class="media" *ngFor="let file of files | async">
     <div class="media-left">
-      <a [href]="image.path" (click)="preview($event)">
-        <img class="media-object" src="{{ image.path }}" style="max-width:200px">
+      <a [href]="file.path" (click)="preview($event)">
+        <img class="media-object" src="{{ file.path }}" style="max-width:200px">
       </a>
     </div>
     <div class="media-body">
-      <h4 class="media-heading">{{ image.name }}</h4>
-      <p>{{ image.size }} bytes</p>
+      <h4 class="media-heading">{{ file.name }}</h4>
+      <p>{{ file.size }} bytes</p>
     </div>
   </div>
 
