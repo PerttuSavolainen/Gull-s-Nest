@@ -5,8 +5,8 @@ import {User, AuthenticationService} from "./authentication.service";
 export interface File {
   name: string,
   path: string,
-  size: number,
-  refUserId: string
+  size: number
+  //refUserId: string
 }
 
 export interface FbFile extends File {
@@ -48,12 +48,7 @@ export class AppComponent implements OnInit {
 
         // create realtime database list,
         // it updates itself when data is added/removed/updated
-        this.files = this.af.database.list('/files', {
-          query: {
-            orderByChild: 'refUserId',
-            equalTo: this.authenticationService.getActiveUser().uid
-          }
-        });
+        this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
 
       } else {
         // logout or not signed in happened
@@ -102,13 +97,10 @@ export class AppComponent implements OnInit {
               let file: File = {
                 name: snapshot.a.name,
                 path: snapshot.a.downloadURLs[0],
-                size: snapshot.a.size,
-                refUserId: this.authenticationService.getActiveUser().uid
+                size: snapshot.a.size
               };
 
-              let files = this.af.database.list('/files');
-
-              files.push(file).then(() => {
+              this.files.push(file).then(() => {
 
               }).catch(error => {
                 // TODO create something  valid here
