@@ -7,18 +7,19 @@ import { AppComponent } from './app.component';
 import {AngularFireModule, AuthProviders, AuthMethods} from "angularfire2";
 import {AuthenticationService} from "./authentication.service";
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const appRoutes: Routes = [
-  { path: '', component: LoginComponent }
-  //{ path: '**', component: PageNotFoundComponent }
+  { path: '', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent }
 ];
 
 export const fireBaseConfig = {
-  apiKey: "AIzaSyCMLXHDso7niqEQFV2XTVChk-PtpJimuaw",
-  authDomain: "gulls-nest.firebaseapp.com",
-  databaseURL: "https://gulls-nest.firebaseio.com",
-  storageBucket: "gulls-nest.appspot.com",
-  messagingSenderId: "995073188328"
+  apiKey: 'AIzaSyCMLXHDso7niqEQFV2XTVChk-PtpJimuaw',
+  authDomain: 'gulls-nest.firebaseapp.com',
+  databaseURL: 'https://gulls-nest.firebaseio.com',
+  storageBucket: 'gulls-nest.appspot.com',
+  messagingSenderId: '995073188328'
 };
 
 const firebaseAuthConfig = {
@@ -29,7 +30,8 @@ const firebaseAuthConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

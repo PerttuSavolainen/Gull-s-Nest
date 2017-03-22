@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {AngularFire, FirebaseApp, FirebaseAuthState} from 'angularfire2';
-import {User, AuthenticationService} from '../authentication.service';
+import { AngularFire, FirebaseApp, FirebaseAuthState } from 'angularfire2';
+import { User, AuthenticationService } from '../authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import {User, AuthenticationService} from '../authentication.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any, public authenticationService: AuthenticationService) {
+  constructor(private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any, public authenticationService: AuthenticationService, private router: Router) {
   }
 
   ngOnInit() {
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
         console.log('Login happened...');
         console.log(auth);
         // TODO: redirect to project page
+        this.router.navigate(['/dashboard']);
 
       } else {
         // logout or not signed in happened
