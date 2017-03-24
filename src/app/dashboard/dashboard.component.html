@@ -11,7 +11,7 @@
   <div class="media" *ngFor="let file of files | async">
     <div class="media-left">
       <a [href]="file.path" (click)="preview($event)">
-        <img class="media-object" src="{{ file.path }}" style="max-width:200px">
+        <img *ngIf="file.type == 'image/png' || file.type == 'image/jpeg'" class="media-object" src="{{ file.path }}" style="max-width:200px">
       </a>
     </div>
     <div class="media-body">

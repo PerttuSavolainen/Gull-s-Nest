@@ -4,9 +4,10 @@ import { User, AuthenticationService } from '../authentication.service';
 import {Router} from "@angular/router";
 
 export interface File {
-  name: string,
-  path: string,
-  size: number
+  name: string;
+  path: string;
+  size: number;
+  type: string;
   //refUserId: string
 }
 
@@ -72,7 +73,7 @@ export class DashboardComponent implements OnInit {
     const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
 
     Object.keys(files).forEach((key) => {
-      if(files[key].type === "image/png" || files[key].type === "image/jpeg") {
+      //if(files[key].type === "image/png" || files[key].type === "image/jpeg") {
 
         let name = files[key].name;
         let lastDotIndex = name.lastIndexOf("."); // get last dot position
@@ -95,7 +96,8 @@ export class DashboardComponent implements OnInit {
               let file: File = {
                 name: snapshot.a.name,
                 path: snapshot.a.downloadURLs[0],
-                size: snapshot.a.size
+                size: snapshot.a.size,
+                type: snapshot.a.contentType
               };
 
               this.files.push(file).then(() => {
@@ -131,10 +133,9 @@ export class DashboardComponent implements OnInit {
 
         });
 
-      }
-      else {
+      /*} else {
         alert("File must be a PNG or JPEG!");
-      }
+      }*/
     });
 
     return false;
