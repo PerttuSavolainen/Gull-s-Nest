@@ -10,16 +10,31 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  isLoading: boolean;
+
   constructor(private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any, public authenticationService: AuthenticationService, private router: Router) {
   }
 
   ngOnInit() {
+
+    this.isLoading = true;
+
     this.af.auth.subscribe((auth: FirebaseAuthState) => {
+
+      this.isLoading = false;
+
       if (auth) {
         // login happened
         console.log('Login happened...');
-        console.log(auth);
-        // TODO: redirect to project page
+
+        let act: User = {};
+        let user = auth.auth;
+
+        if (user.displayName) act.displayName = user.displayName;
+        if (user.photoURL) act.photoUrl = user.photoURL;
+        act.uid = user.uid;
+
+        this.authenticationService.setActiveUser(act);
         this.router.navigate(['/dashboard']);
 
       } else {

@@ -28,36 +28,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.af.auth.subscribe((auth: FirebaseAuthState) => {
-      if (auth) {
-        // login happened
-        console.log('Login happened...');
-        console.log(auth);
 
-        let act: User = {};
-        let user = auth.auth;
+    // check that user is logged in
+    if (this.authenticationService.getActiveUser()) {
+      // create realtime database list,
+      // it updates itself when data is added/removed/updated
+      this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
+    } else {
+      // not signed in, redirect to login
+      this.nullAndRedirect();
+    }
 
-        if (user.displayName) act.displayName = user.displayName;
-        if (user.photoURL) act.photoUrl = user.photoURL;
-        act.uid = user.uid;
-
-        this.authenticationService.setActiveUser(act);
-        // create realtime database list,
-        // it updates itself when data is added/removed/updated
-        this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
-
-      } else {
-        // logout or not signed in happened
-        this.authenticationService.setActiveUser(null);
-        this.files = null;
-        this.router.navigate(['/']);
-      }
-
-    });
-
-    // TODO load user's files
-    const storageRef = this.firebaseApp.storage().ref();
-    console.log(storageRef);
   }
 
   /**
@@ -65,8 +46,16 @@ export class DashboardComponent implements OnInit {
    */
   logout() {
     this.af.auth.logout();
+    this.nullAndRedirect();
+
+  }
+
+  private nullAndRedirect() {
+    this.authenticationService.setActiveUser(null);
+    this.files = null;
     this.router.navigate(['/']);
   }
+
   handleDrop(e) {
 
     let files:File = e.dataTransfer.files;
