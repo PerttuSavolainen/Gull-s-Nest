@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} from 'angularfire2';
 import { User, AuthenticationService } from '../authentication.service';
 import {Router} from "@angular/router";
+import {ElectronService} from "ngx-electron";
+
 
 export interface File {
   name: string;
@@ -9,7 +11,6 @@ export interface File {
   size: number;
   type: string;
   md5Hash: string;
-  //refUserId: string
 }
 
 export interface FbFile extends File {
@@ -25,7 +26,11 @@ export class DashboardComponent implements OnInit {
 
   files: FirebaseListObservable<any[]>;
 
-  constructor(private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any, public authenticationService: AuthenticationService, private router: Router) {
+  constructor(
+    private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any,
+    public authenticationService: AuthenticationService, private router: Router,
+    private electronService: ElectronService
+  ) {
   }
 
   ngOnInit() {
@@ -39,6 +44,15 @@ export class DashboardComponent implements OnInit {
       // not signed in, redirect to login
       this.nullAndRedirect();
     }
+
+    // render and main process messaging test
+    console.log(this.electronService.ipcRenderer.sendSync('synchronous-message', 'ping'));
+
+    this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
+      console.log(arg) // prints "pong"
+    });
+
+    this.electronService.ipcRenderer.send('asynchronous-message', 'ping')
 
   }
 

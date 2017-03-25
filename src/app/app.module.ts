@@ -8,6 +8,8 @@ import {AngularFireModule, AuthProviders, AuthMethods} from "angularfire2";
 import {AuthenticationService} from "./authentication.service";
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {MdProgressCircleModule} from "@angular2-material/progress-circle";
+import {NgxElectronModule} from "ngx-electron";
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -38,7 +40,9 @@ const firebaseAuthConfig = {
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    AngularFireModule.initializeApp(fireBaseConfig, firebaseAuthConfig)
+    AngularFireModule.initializeApp(fireBaseConfig, firebaseAuthConfig),
+    MdProgressCircleModule,
+    NgxElectronModule
   ],
   providers: [AuthenticationService],
   bootstrap: [AppComponent]

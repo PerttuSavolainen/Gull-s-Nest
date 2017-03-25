@@ -32,7 +32,9 @@
   <div [ngSwitch]="isLoading">
 
     <div *ngSwitchCase="true">
-      <p style="text-align: center;">Loading...</p>
+      <div style="text-align: center">
+        <md-progress-circle mode="indeterminate"></md-progress-circle>
+      </div>
     </div>
     <div *ngSwitchDefault class="login-page__button" (click)="login()">
       <p class="login-page__button_text">Login with <b>Google</b></p>
