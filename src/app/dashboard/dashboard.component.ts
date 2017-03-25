@@ -8,6 +8,7 @@ export interface File {
   path: string;
   size: number;
   type: string;
+  md5Hash: string;
   //refUserId: string
 }
 
@@ -86,7 +87,8 @@ export class DashboardComponent implements OnInit {
                 name: snapshot.a.name,
                 path: snapshot.a.downloadURLs[0],
                 size: snapshot.a.size,
-                type: snapshot.a.contentType
+                type: snapshot.a.contentType,
+                md5Hash: snapshot.a.md5Hash
               };
 
               this.files.push(file).then(() => {

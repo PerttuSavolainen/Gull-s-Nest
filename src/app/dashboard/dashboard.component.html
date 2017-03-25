@@ -17,6 +17,7 @@
     <div class="media-body">
       <h4 class="media-heading">{{ file.name }}</h4>
       <p>{{ file.size }} bytes</p>
+      <a [href]="file.path" download>Download</a>
       <button (click)="deleteFile(file)">Delete</button>
     </div>
   </div>
