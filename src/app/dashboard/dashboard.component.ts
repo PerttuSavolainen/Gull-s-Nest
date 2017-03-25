@@ -144,6 +144,29 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  downloadFile(file: FbFile) {
+    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
+    let fileRef = storageRef.child(file.name);
+
+    fileRef.getMetadata().then(metadata => {
+
+      // Test integrity by comparing storage and database hashes
+      if (metadata.md5Hash === file.md5Hash) {
+        // hashes matched,
+        // create link tag and click it aka download a file
+        let dl = document.createElement("a");
+        dl.setAttribute("href", file.path);
+        dl.setAttribute("download", file.name);
+        dl.click();
+      } else {
+        // integrity is compromised
+        // TODO don't let user load this file and inform user about this
+      }
+
+    });
+
+  }
+
   deleteFile(file: FbFile){
 
     const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
