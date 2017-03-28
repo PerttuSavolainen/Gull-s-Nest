@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} from 'angularfire2';
 import { User, AuthenticationService } from '../authentication.service';
-import {Router} from "@angular/router";
-import {ElectronService} from "ngx-electron";
+import {Router} from '@angular/router';
+import {ElectronService} from 'ngx-electron';
 
 
 export interface File {
@@ -24,6 +24,7 @@ export interface FbFile extends File {
 })
 export class DashboardComponent implements OnInit {
 
+  folders: FirebaseListObservable<any[]>;
   files: FirebaseListObservable<any[]>;
 
   constructor(
@@ -37,9 +38,14 @@ export class DashboardComponent implements OnInit {
 
     // check that user is logged in
     if (this.authenticationService.getActiveUser()) {
-      // create realtime database list,
+      // create realtime database list of folders,
       // it updates itself when data is added/removed/updated
+      this.folders = this.af.database.list('/folders/' + this.authenticationService.getActiveUser().uid);
       this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
+
+      // just for testing
+      this.addFolder();
+
     } else {
       // not signed in, redirect to login
       this.nullAndRedirect();
@@ -49,10 +55,10 @@ export class DashboardComponent implements OnInit {
     console.log(this.electronService.ipcRenderer.sendSync('synchronous-message', 'ping'));
 
     this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-      console.log(arg) // prints "pong"
+      console.log(arg); // prints "pong"
     });
 
-    this.electronService.ipcRenderer.send('asynchronous-message', 'ping')
+    this.electronService.ipcRenderer.send('asynchronous-message', 'ping');
 
   }
 
@@ -67,80 +73,77 @@ export class DashboardComponent implements OnInit {
 
   private nullAndRedirect() {
     this.authenticationService.setActiveUser(null);
+    this.folders = null;
     this.files = null;
     this.router.navigate(['/']);
   }
 
   handleDrop(e) {
 
-    let files:File = e.dataTransfer.files;
-    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
+    const files: File = e.dataTransfer.files;
+    const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);
 
     Object.keys(files).forEach((key) => {
-      //if(files[key].type === "image/png" || files[key].type === "image/jpeg") {
 
-        let name = files[key].name;
-        let lastDotIndex = name.lastIndexOf("."); // get last dot position
-        let newName = name.slice(0, lastDotIndex) + "_" + this.generateNonce(20) + name.slice(lastDotIndex);
+      const name = files[key].name;
+      const lastDotIndex = name.lastIndexOf('.'); // get last dot position
+      const newName = name.slice(0, lastDotIndex) + '_' + this.generateNonce(20) + name.slice(lastDotIndex);
 
-        let fileRef = storageRef.child(newName);
+      const fileRef = storageRef.child(newName);
 
-        fileRef.put(files[key]).then(snapshot => {
+      fileRef.put(files[key]).then(snapshot => {
 
-          console.log(snapshot);
+        console.log(snapshot);
 
-          if (snapshot) {
+        if (snapshot) {
 
-            // TODO handle different scenarios
-            if (snapshot.a && snapshot.f === "success") {
+          // TODO handle different scenarios
+          if (snapshot.a && snapshot.f === 'success') {
 
-              // TODO get path that needs authentication,
-              // snapshot.a.downloadURLs[0] is accessible for everyone
+            // TODO get path that needs authentication,
+            // snapshot.a.downloadURLs[0] is accessible for everyone
 
-              let file: File = {
-                name: snapshot.a.name,
-                path: snapshot.a.downloadURLs[0],
-                size: snapshot.a.size,
-                type: snapshot.a.contentType,
-                md5Hash: snapshot.a.md5Hash
-              };
+            const file: File = {
+              name: snapshot.a.name,
+              path: snapshot.a.downloadURLs[0],
+              size: snapshot.a.size,
+              type: snapshot.a.contentType,
+              md5Hash: snapshot.a.md5Hash
+            };
 
-              this.files.push(file).then(() => {
+            this.files.push(file).then(() => {
 
-              }).catch(error => {
-                // TODO create something  valid here
-                console.error(error)
-              });
-
-            }
+            }).catch(error => {
+              // TODO create something  valid here
+              console.error(error);
+            });
 
           }
 
-        }).catch(error => {
+        }
 
-          // TODO give some kind of info about the error to the end user
+      }).catch(error => {
 
-          // A full list of error codes is available at
-          // https://firebase.google.com/docs/storage/web/handle-errors
-          switch (error.code) {
-            case 'storage/unauthorized':
-              // User doesn't have permission to access the object
-              break;
+        // TODO give some kind of info about the error to the end user
 
-            case 'storage/canceled':
-              // User canceled the upload
-              break;
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
 
-            case 'storage/unknown':
-              // Unknown error occurred, inspect error.serverResponse
-              break;
-          }
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
 
-        });
+          case 'storage/unknown':
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
 
-      /*} else {
-        alert("File must be a PNG or JPEG!");
-      }*/
+      });
+
     });
 
     return false;
@@ -158,9 +161,18 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  addFolder() {
+    console.log('addFolder...');
+
+    this.files.forEach((file) => {
+      console.log(file);
+    });
+
+  }
+
   downloadFile(file: FbFile) {
-    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
-    let fileRef = storageRef.child(file.name);
+    const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);
+    const fileRef = storageRef.child(file.name);
 
     fileRef.getMetadata().then(metadata => {
 
@@ -168,9 +180,9 @@ export class DashboardComponent implements OnInit {
       if (metadata.md5Hash === file.md5Hash) {
         // hashes matched,
         // create link tag and click it aka download a file
-        let dl = document.createElement("a");
-        dl.setAttribute("href", file.path);
-        dl.setAttribute("download", file.name);
+        const dl = document.createElement('a');
+        dl.setAttribute('href', file.path);
+        dl.setAttribute('download', file.name);
         dl.click();
       } else {
         // integrity is compromised
@@ -183,15 +195,15 @@ export class DashboardComponent implements OnInit {
 
   deleteFile(file: FbFile){
 
-    const storageRef = this.firebaseApp.storage().ref("/" + this.authenticationService.getActiveUser().uid);
-    let fileRef = storageRef.child(file.name);
+    const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);
+    const fileRef = storageRef.child(file.name);
 
     fileRef.delete().then(() => {
 
       // file deleted successfully,
       // next delete database reference
       this.files.remove(file.$key).then(() => {
-        console.log("File deleted successfully");
+        console.log('File deleted successfully');
       }).catch(error => {
         console.error(error);
       });
@@ -211,10 +223,10 @@ export class DashboardComponent implements OnInit {
    */
   private generateNonce(length: number){
 
-    let text: string = '';
-    let possible: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for(let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
