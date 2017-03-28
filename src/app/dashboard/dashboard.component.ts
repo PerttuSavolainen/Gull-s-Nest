@@ -61,9 +61,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  addFolder(){
-  }
-  toggleSearch(){
+  toggleSearch() {
   }
 
   /**
@@ -166,11 +164,40 @@ export class DashboardComponent implements OnInit {
   }
 
   addFolder() {
-    console.log('addFolder...');
 
-    this.files.forEach((file) => {
-      console.log(file);
+    let nameExists: boolean = false;
+
+    // TODO handle folder name
+    let folderName = "moi" + Math.random() * 100;
+
+    this.folders.forEach((folder: any) => {
+      console.log(folder);
+      // check if name already exists
+      if (folderName === folder.name) {
+          nameExists = true;
+          // break;
+      }
     });
+
+    if (nameExists) {
+      // name already exist, inform user about this
+    } else {
+      // create folder
+      const folder: { name: string } = {
+        name: folderName
+      };
+
+      this.folders.push(folder).then((res) => {
+
+        console.log(res);
+
+      }).catch(error => {
+        // TODO create something  valid here
+        console.error(error);
+      });
+
+
+    }
 
   }
 
