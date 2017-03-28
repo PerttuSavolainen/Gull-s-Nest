@@ -35,7 +35,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
     // check that user is logged in
     if (this.authenticationService.getActiveUser()) {
       // create realtime database list of folders,
@@ -60,6 +59,11 @@ export class DashboardComponent implements OnInit {
 
     this.electronService.ipcRenderer.send('asynchronous-message', 'ping');
 
+  }
+
+  addFolder(){
+  }
+  toggleSearch(){
   }
 
   /**

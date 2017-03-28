@@ -1,11 +1,26 @@
-<div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
+<section class="dashboard-sidebar">
+  <div class="dashboard-sidebar__project-list">
+    <div class="dashboard-sidebar__tool-icons">
+      <i class="material-icons tool-icon" (click)="toggleSearch()">search</i>
+      <i class="material-icons tool-icon" (click)="addFolder()">create_new_folder</i>
+    </div>
+    <div class="dashboard-sidebar__projects">
+      <div class="dashboard-sidebar__project">
+        <h1>Y</h1>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-sidebar__file-list">
 
+  </div>
+</section>
+<section class="dashboard-content" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
   <button class="" (click)="logout()">Logout</button>
 
   <h2>{{ authenticationService?.getActiveUser()?.displayName }}
     <span *ngIf="authenticationService?.getActiveUser()?.photoUrl">
-    <img [src]="authenticationService?.getActiveUser()?.photoUrl" style="max-width: 100px; border-radius: 50%;">
-  </span>
+      <img [src]="authenticationService?.getActiveUser()?.photoUrl" style="max-width: 100px; border-radius: 50%;">
+    </span>
   </h2>
 
   <div class="media" *ngFor="let file of files | async">
@@ -22,5 +37,4 @@
       <button (click)="deleteFile(file)">Delete</button>
     </div>
   </div>
-
-</div>
+</section>
