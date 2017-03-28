@@ -1,0 +1,47 @@
+@import '../theme/variables';
+
+.dashboard-sidebar{
+  position: fixed;
+  width: 350px;
+  height: 100vh;
+  background-color: $color-darkest-grey;
+}
+.dashboard-sidebar__project-list{
+  height: 100%;
+  float:left;
+  width: 25%;
+  background-color: $color-darkest-grey;
+}
+.dashboard-sidebar__file-list{
+  float:left;
+  height: 100%;
+  width: 75%;
+  background-color: $color-darker-grey;
+}
+.dashboard-content{
+  float:right;
+}
+.dashboard-sidebar__tool-icons{
+  width: 100%;
+  padding-top: 20px;
+  text-align: center;
+  .tool-icon{
+    color: $color-white;
+    margin-bottom: 20px;
+    font-size: 50px;
+
+    &:hover{
+     cursor: pointer;
+     color: $color-button-hover;
+    }
+  }
+}
+.dashboard-sidebar__projects{
+  .dashboard-sidebar__project{
+    margin: 0 auto;
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    background-color: $color-green;
+  }
+}

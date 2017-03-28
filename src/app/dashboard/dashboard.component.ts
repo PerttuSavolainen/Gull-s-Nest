@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} from 'angularfire2';
 import { User, AuthenticationService } from '../authentication.service';
-import {Router} from "@angular/router";
-import {ElectronService} from "ngx-electron";
+import {Router} from '@angular/router';
+import {ElectronService} from 'ngx-electron';
 
 
 export interface File {
@@ -34,7 +34,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
     // check that user is logged in
     if (this.authenticationService.getActiveUser()) {
       // create realtime database list,
@@ -54,6 +53,11 @@ export class DashboardComponent implements OnInit {
 
     this.electronService.ipcRenderer.send('asynchronous-message', 'ping')
 
+  }
+
+  addFolder(){
+  }
+  toggleSearch(){
   }
 
   /**

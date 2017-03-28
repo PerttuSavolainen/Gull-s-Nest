@@ -55,7 +55,7 @@ app.on('ready', function () {
   });
 
   // Tray: Add icons and context menus to the system’s notification area
-  let tray = new Tray('C:\\Users\\Pedo\\WebstormProjects\\gull-s-nest\\src\\favicon.ico');
+  let tray = new Tray( path.join(__dirname, 'src/favicon.ico') );
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Item1', type: 'radio'},
     {label: 'Item2', type: 'radio'},
