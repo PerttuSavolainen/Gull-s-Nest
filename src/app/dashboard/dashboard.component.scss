@@ -49,6 +49,7 @@
     padding: 3px 5px;
     margin: 10px 10px 15px 10px;
     font-family: 'Ubuntu', sans-serif;
+    font-weight: 300;
     color: $color-white;
 
     &:hover{
@@ -59,9 +60,11 @@
 }
 .dashboard-sidebar__file-list__title{
   padding: 10px 0 10px 30px;
+  //border-bottom: 5px solid $color-green;
 
   h1{
     font-family: 'Ubuntu', sans-serif;
+    font-weight: 300;
     color: $color-white;
   }
 }
@@ -78,6 +81,7 @@
       i{
         vertical-align: text-bottom;
         margin-right: 10px;
+        color: $color-green;
       }
     }
   }
@@ -88,11 +92,14 @@
   background-color: $color-green;
 }
 .p-1{
-  background-color: lighten($color-violet, 5%);
+  background-color: $color-violet;
 }
 .p-2{
   background-color: $color-blue;
 }
 .p-3{
   background-color: $color-red;
+}
+.p-4{
+  background-color: $color-brown;
 }
