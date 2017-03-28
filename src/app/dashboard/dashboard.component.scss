@@ -1,4 +1,6 @@
 @import '../theme/variables';
+@import '../theme/scrollbar';
+
 
 .dashboard-sidebar{
   position: fixed;
@@ -9,13 +11,13 @@
 .dashboard-sidebar__project-list{
   height: 100%;
   float:left;
-  width: 25%;
+  width: 30%;
   background-color: $color-darkest-grey;
 }
 .dashboard-sidebar__file-list{
   float:left;
   height: 100%;
-  width: 75%;
+  width: 70%;
   background-color: $color-darker-grey;
 }
 .dashboard-content{
@@ -25,10 +27,11 @@
   width: 100%;
   padding-top: 20px;
   text-align: center;
+
   .tool-icon{
     color: $color-white;
     margin-bottom: 20px;
-    font-size: 50px;
+    font-size: 60px;
 
     &:hover{
      cursor: pointer;
@@ -37,11 +40,59 @@
   }
 }
 .dashboard-sidebar__projects{
+  overflow-y: auto;
+  height: calc(100% - 180px);
+
   .dashboard-sidebar__project{
     margin: 0 auto;
     text-align: center;
-    width: 60px;
-    height: 60px;
-    background-color: $color-green;
+    padding: 3px 5px;
+    margin: 10px 10px 15px 10px;
+    font-family: 'Ubuntu', sans-serif;
+    color: $color-white;
+
+    &:hover{
+      cursor: pointer;
+      filter: brightness(75%);
+    }
   }
+}
+.dashboard-sidebar__file-list__title{
+  padding: 10px 0 10px 30px;
+
+  h1{
+    font-family: 'Ubuntu', sans-serif;
+    color: $color-white;
+  }
+}
+.dashboard-sidebar__file-list__files{
+  ul {
+    list-style: none;
+
+    .dashboard-sidebar__file-list__file{
+      margin-bottom: 15px;
+      color: $color-white;
+      font-family: 'Ubuntu', sans-serif;
+      vertical-align: middle;
+
+      i{
+        vertical-align: text-bottom;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+// For testing only
+.p-0{
+  background-color: $color-green;
+}
+.p-1{
+  background-color: lighten($color-violet, 5%);
+}
+.p-2{
+  background-color: $color-blue;
+}
+.p-3{
+  background-color: $color-red;
 }
