@@ -1,61 +1,42 @@
-<section class="dashboard-sidebar">
+<section class="dashboard-sidebar" (dragover)="false" (dragend)="false" (drop)="false">
   <div class="dashboard-sidebar__project-list">
     <div class="dashboard-sidebar__tool-icons">
       <i class="material-icons tool-icon" (click)="toggleSearch()">search</i>
       <i class="material-icons tool-icon" (click)="addFolder()">create_new_folder</i>
     </div>
     <div class="dashboard-sidebar__projects">
-      <!-- Replace with ngFor -->
-      <div class="dashboard-sidebar__project p-0">
-        <h1>Y</h1>
-      </div>
-      <div class="dashboard-sidebar__project p-1">
-        <h1>S</h1>
-      </div>
-      <div class="dashboard-sidebar__project p-2">
-        <h1>R</h1>
-      </div>
-      <div class="dashboard-sidebar__project p-3">
-        <h1>G</h1>
-      </div>
-      <div class="dashboard-sidebar__project p-4">
-        <h1>S</h1>
-      </div>
-      <div class="dashboard-sidebar__project p-2">
-        <h1>R</h1>
+      <div class="dashboard-sidebar__project p-0"
+           *ngFor="let folder of folders | async; let i = index;"
+           [ngClass]="'p-' + i" (click)="activateFolder(folder)">
+        <h1>{{ folder.name[0] }}</h1>
       </div>
     </div>
   </div>
   <div class="dashboard-sidebar__file-list">
     <div class="dashboard-sidebar__file-list__title">
-      <h1>yellowcake</h1>
+      <h1 [title]="activeFolder?.name || 'Gull\'s Nest'">{{ activeFolder?.name || "Gull's Nest"}}</h1>
     </div>
     <div class="dashboard-sidebar__file-list__files">
       <ul>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
-        <li class="dashboard-sidebar__file-list__file"><i class="material-icons">image</i>tiedosto.png</li>
+        <li class="dashboard-sidebar__file-list__file" *ngFor="let file of (files | async | activeFiles: activeFolder?.$key)"
+          (click)="preview(file.path)" [title]="file.name">
+          <!-- switch case of icons here -->
+          <i class="material-icons">image</i>
+          {{ file.name }}
+        </li>
       </ul>
     </div>
   </div>
 </section>
 <section class="dashboard-content" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
-  <button class="" (click)="logout()">Logout</button>
 
-  <h2>{{ authenticationService?.getActiveUser()?.displayName }}
-    <span *ngIf="authenticationService?.getActiveUser()?.photoUrl">
-      <img [src]="authenticationService?.getActiveUser()?.photoUrl" style="max-width: 100px; border-radius: 50%;">
-    </span>
+  <h2 class="dashboard-content__user" (click)="logout()">{{ authenticationService?.getActiveUser()?.displayName }}
+      <img class="dashboard-content__user__image" *ngIf="authenticationService?.getActiveUser()?.photoUrl" [src]="authenticationService?.getActiveUser()?.photoUrl">
   </h2>
 
-  <div class="media" *ngFor="let file of files | async">
+  <!--<div class="media" *ngFor="let file of files | async">
     <div class="media-left">
-      <a [href]="file.path" (click)="preview($event)">
+      <a>
         <img *ngIf="file.type == 'image/png' || file.type == 'image/jpeg'" class="media-object" src="{{ file.path }}" style="max-width:200px">
       </a>
     </div>
@@ -63,8 +44,8 @@
       <h4 class="media-heading">{{ file.name }}</h4>
       <p>{{ file.size }} bytes</p>
       <!--<a [href]="file.path" download>Download</a>-->
-      <button (click)="downloadFile(file)">Download</button>
+      <!--<button (click)="downloadFile(file)">Download</button>
       <button (click)="deleteFile(file)">Delete</button>
     </div>
-  </div>
+  </div>-->
 </section>

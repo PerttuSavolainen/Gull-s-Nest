@@ -1,6 +1,11 @@
 @import '../theme/variables';
 @import '../theme/scrollbar';
 
+.text-overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
 .dashboard-sidebar{
   position: fixed;
@@ -15,13 +20,34 @@
   background-color: $color-darkest-grey;
 }
 .dashboard-sidebar__file-list{
+  padding: 10px 30px;
   float:left;
   height: 100%;
   width: 70%;
+  box-sizing: border-box;
   background-color: $color-darker-grey;
 }
 .dashboard-content{
+  width: calc(100% - 350px);
+  min-height: 100vh;
   float:right;
+
+  .dashboard-content__user {
+    float: right;
+    cursor: pointer;
+    margin: 20px;
+    vertical-align: middle;
+    overflow: hidden; // clears float
+
+    .dashboard-content__user__image {
+      margin-left: 10px;
+      max-width: 50px;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
+
+  }
+
 }
 .dashboard-sidebar__tool-icons{
   width: 100%;
@@ -46,11 +72,16 @@
   .dashboard-sidebar__project{
     margin: 0 auto;
     text-align: center;
-    padding: 3px 5px;
+    //padding: 3px 5px;
     margin: 10px 10px 15px 10px;
     font-family: 'Ubuntu', sans-serif;
     font-weight: 300;
     color: $color-white;
+
+    h1 {
+      padding: 3px 5px;
+      display: inline-block;
+    }
 
     &:hover{
       cursor: pointer;
@@ -58,30 +89,40 @@
     }
   }
 }
-.dashboard-sidebar__file-list__title{
-  padding: 10px 0 10px 30px;
-  //border-bottom: 5px solid $color-green;
 
-  h1{
+.dashboard-sidebar__file-list__title {
+
+  h1 {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 300;
     color: $color-white;
+    @extend .text-overflow-ellipsis;
   }
 }
-.dashboard-sidebar__file-list__files{
+.dashboard-sidebar__file-list__files {
   ul {
-    list-style: none;
 
-    .dashboard-sidebar__file-list__file{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .dashboard-sidebar__file-list__file {
+
+      &:empty {
+        display: none;
+      }
+
       margin-bottom: 15px;
       color: $color-white;
       font-family: 'Ubuntu', sans-serif;
       vertical-align: middle;
+      @extend .text-overflow-ellipsis;
 
-      i{
+      i {
         vertical-align: text-bottom;
         margin-right: 10px;
         color: $color-green;
+        vertical-align: middle;
       }
     }
   }

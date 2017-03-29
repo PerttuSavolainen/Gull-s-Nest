@@ -3,7 +3,12 @@ import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} fro
 import { User, AuthenticationService } from '../authentication.service';
 import {Router} from '@angular/router';
 import {ElectronService} from 'ngx-electron';
+import {Subscription} from "rxjs";
 
+export interface Folder {
+  name: string;
+  $key?: string;
+}
 
 export interface File {
   name: string;
@@ -11,6 +16,7 @@ export interface File {
   size: number;
   type: string;
   md5Hash: string;
+  folderRefId: string;
 }
 
 export interface FbFile extends File {
@@ -24,8 +30,9 @@ export interface FbFile extends File {
 })
 export class DashboardComponent implements OnInit {
 
-  folders: FirebaseListObservable<any[]>;
-  files: FirebaseListObservable<any[]>;
+  activeFolder: Folder;
+  folders: FirebaseListObservable<Array<Folder>>;
+  files: FirebaseListObservable<Array<File>>;
 
   constructor(
     private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any,
@@ -42,8 +49,18 @@ export class DashboardComponent implements OnInit {
       this.folders = this.af.database.list('/folders/' + this.authenticationService.getActiveUser().uid);
       this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
 
-      // just for testing
-      this.addFolder();
+      // set first folder as a active folder
+      this.folders.subscribe((res: Array<Folder>) => {
+        this.activeFolder = res[0];
+      });
+
+      this.files.subscribe((res) => {
+
+        console.log("active")
+        console.log(this.activeFolder)
+
+        console.log(res)
+      })
 
     } else {
       // not signed in, redirect to login
@@ -70,11 +87,11 @@ export class DashboardComponent implements OnInit {
   logout() {
     this.af.auth.logout();
     this.nullAndRedirect();
-
   }
 
   private nullAndRedirect() {
     this.authenticationService.setActiveUser(null);
+    this.activeFolder = null;
     this.folders = null;
     this.files = null;
     this.router.navigate(['/']);
@@ -110,7 +127,8 @@ export class DashboardComponent implements OnInit {
               path: snapshot.a.downloadURLs[0],
               size: snapshot.a.size,
               type: snapshot.a.contentType,
-              md5Hash: snapshot.a.md5Hash
+              md5Hash: snapshot.a.md5Hash,
+              folderRefId: this.activeFolder.$key
             };
 
             this.files.push(file).then(() => {
@@ -156,11 +174,51 @@ export class DashboardComponent implements OnInit {
    *
    * @param e
    */
-  preview(e: Event) {
+  preview(path) {
 
-    e.preventDefault();
+    console.log(path);
+
+    //e.preventDefault();
     // TODO send link of preview to child directive
 
+  }
+
+  activateFolder(folder: Folder) {
+    this.activeFolder = folder;
+    console.log(this.activeFolder);
+  }
+
+  handleFiles() {
+
+    let array: Array<File> = [];
+
+    this.files.forEach((file: any) => {
+
+      if (file.folderRefId === this.activeFolder.$key) {
+        array.push(file);
+      }
+
+    }).then(() => {
+      return array;
+    });
+
+
+
+
+
+/*    return this.files.subscribe((res: Array<File>) => {
+
+      let array: Array<File> = [];
+
+      for (let file of res) {
+        if (file.folderRefId === this.activeFolder.$key) {
+          array.push(file);
+        }
+      }
+
+      return array;
+
+    });*/
   }
 
   addFolder() {
@@ -168,7 +226,7 @@ export class DashboardComponent implements OnInit {
     let nameExists: boolean = false;
 
     // TODO handle folder name
-    let folderName = "moi" + Math.random() * 100;
+    let folderName = "folder-" + this.generateNonce(20);
 
     this.folders.forEach((folder: any) => {
       console.log(folder);
@@ -183,7 +241,7 @@ export class DashboardComponent implements OnInit {
       // name already exist, inform user about this
     } else {
       // create folder
-      const folder: { name: string } = {
+      const folder: Folder = {
         name: folderName
       };
 
@@ -263,6 +321,10 @@ export class DashboardComponent implements OnInit {
 
     return text;
 
+  }
+
+  generateColorClass(): string {
+    return 'p-' + Math.round(Math.random()*4);
   }
 
 }

@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {MdProgressCircleModule} from "@angular2-material/progress-circle";
 import {NgxElectronModule} from "ngx-electron";
+import { ActiveFilesPipe } from './active-files.pipe';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,7 +34,8 @@ const firebaseAuthConfig = {
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    ActiveFilesPipe
   ],
   imports: [
     BrowserModule,
