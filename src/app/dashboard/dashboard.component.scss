@@ -38,6 +38,8 @@
     margin: 20px;
     vertical-align: middle;
     overflow: hidden; // clears float
+    font-size: 20px;
+    color: $color-button-hover;
 
     .dashboard-content__user__image {
       margin-left: 10px;
@@ -80,6 +82,7 @@
 
     h1 {
       padding: 3px 5px;
+      font-size: 30px;
       display: inline-block;
     }
 
@@ -95,6 +98,7 @@
   h1 {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 300;
+    font-size: 30px;
     color: $color-white;
     @extend .text-overflow-ellipsis;
   }

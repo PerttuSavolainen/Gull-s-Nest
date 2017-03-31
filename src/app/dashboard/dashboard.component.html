@@ -28,6 +28,9 @@
     </div>
   </div>
 </section>
+
+
+
 <section class="dashboard-content" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
 
   <h2 class="dashboard-content__user" (click)="logout()">{{ authenticationService?.getActiveUser()?.displayName }}
