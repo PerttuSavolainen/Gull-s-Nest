@@ -1,9 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} from 'angularfire2';
 import { User, AuthenticationService } from '../authentication.service';
 import {Router} from '@angular/router';
 import {ElectronService} from 'ngx-electron';
 import {Subscription} from "rxjs";
+
+
 
 export interface Folder {
   name: string;
@@ -42,6 +44,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     // check that user is logged in
     if (this.authenticationService.getActiveUser()) {
       // create realtime database list of folders,

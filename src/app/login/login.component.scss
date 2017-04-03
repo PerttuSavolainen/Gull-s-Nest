@@ -25,24 +25,27 @@
 
   .login-page__button{
     margin: 0 auto;
-    padding: 10px;
+    padding: 25px;
     background-color: $color-blue;
     width: 300px;
     box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.42);
     transition: background 1s;
 
+    &:hover{
+      cursor:pointer;
+      background-color: $color-violet;
+      box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.42);
+    }
+
     .login-page__button_text{
       text-align: center;
       color: #ffffff;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
+      font-weight: 300;
       font-family: 'Ubuntu', sans-serif;
       -webkit-font-smoothing: subpixel-antialiased;
+      margin: 0;
     }
-  }
-  .login-page__button:hover{
-    cursor:pointer;
-    background-color: $color-violet;
-    box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.42);
   }
 }
 
@@ -56,9 +59,7 @@
   stroke-width:3;
   stroke-miterlimit:10;
 }
-.st0:hover{
-  //stroke: mix(white, $color-brown, 30%);
-}
+
 .st1 {
   fill:none;
 }

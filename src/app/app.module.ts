@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {MdProgressCircleModule} from "@angular2-material/progress-circle";
 import {NgxElectronModule} from "ngx-electron";
 import { ActiveFilesPipe } from './active-files.pipe';
+import { EventlistenerDirective } from './eventlistener.directive';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -35,7 +36,8 @@ const firebaseAuthConfig = {
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    ActiveFilesPipe
+    ActiveFilesPipe,
+    EventlistenerDirective
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,11 @@
 <section class="dashboard-sidebar" (dragover)="false" (dragend)="false" (drop)="false">
+
   <div class="dashboard-sidebar__project-list">
     <div class="dashboard-sidebar__tool-icons">
       <i class="material-icons tool-icon" (click)="toggleSearch()">search</i>
       <i class="material-icons tool-icon" (click)="addFolder()">create_new_folder</i>
     </div>
-    <div class="dashboard-sidebar__projects">
+    <div class="dashboard-sidebar__projects" appEventlistener>
       <div class="dashboard-sidebar__project p-0"
            *ngFor="let folder of folders | async; let i = index;"
            [ngClass]="'p-' + i" (click)="activateFolder(folder)">
@@ -28,8 +29,6 @@
     </div>
   </div>
 </section>
-
-
 
 <section class="dashboard-content" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
 

@@ -68,7 +68,7 @@
   }
 }
 .dashboard-sidebar__projects{
-  overflow-y: auto;
+  //overflow-y: auto;
   height: calc(100% - 180px);
 
   .dashboard-sidebar__project{
@@ -82,6 +82,7 @@
 
     h1 {
       padding: 3px 5px;
+      margin: 20px 0;
       font-size: 30px;
       display: inline-block;
     }
