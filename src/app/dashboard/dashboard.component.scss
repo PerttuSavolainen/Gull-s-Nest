@@ -10,20 +10,23 @@
 .dashboard-sidebar{
   position: fixed;
   width: 350px;
+  resize: horizontal;
+  overflow: auto;
   height: 100vh;
-  background-color: $color-darkest-grey;
+  background-color: $color-darker-grey;
 }
 .dashboard-sidebar__project-list{
   height: 100%;
   float:left;
   width: 30%;
+  max-width: 105px;
   background-color: $color-darkest-grey;
 }
 .dashboard-sidebar__file-list{
   padding: 10px 30px;
   float:left;
   height: 100%;
-  width: 70%;
+  width: calc(100% - 105px);
   box-sizing: border-box;
   background-color: $color-darker-grey;
 }
@@ -58,8 +61,8 @@
 
   .tool-icon{
     color: $color-white;
-    margin-bottom: 20px;
-    font-size: 60px;
+    font-size: 45px;
+    margin: 15px 20px;
 
     &:hover{
      cursor: pointer;
