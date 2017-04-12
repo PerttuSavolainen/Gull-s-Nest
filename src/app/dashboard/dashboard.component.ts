@@ -285,6 +285,12 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  onDelete(e){
+    // TODO: delete folder and all the files
+    console.log('drop');
+    console.log(e);
+  }
+
   deleteFile(file: FbFile){
 
     const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);

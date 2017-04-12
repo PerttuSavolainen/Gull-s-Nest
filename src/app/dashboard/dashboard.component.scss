@@ -6,13 +6,17 @@
   overflow: hidden;
   white-space: nowrap;
 }
+[draggable=true] {
+    cursor: move;
+}
 
 .dashboard-sidebar{
   position: fixed;
   width: 350px;
   resize: horizontal;
-  overflow: auto;
+  overflow-y: hidden;
   height: 100vh;
+  //margin-right: 20px;
   background-color: $color-darker-grey;
 }
 .dashboard-sidebar__project-list{
@@ -72,7 +76,8 @@
 }
 .dashboard-sidebar__projects{
   //overflow-y: auto;
-  height: calc(100% - 180px);
+  //height: calc(100% - 180px);
+  height: calc(100% - 283.5px);
 
   .dashboard-sidebar__project{
     margin: 0 auto;
@@ -102,7 +107,7 @@
   h1 {
     font-family: 'Ubuntu', sans-serif;
     font-weight: 300;
-    font-size: 30px;
+    font-size: 22px;
     color: $color-white;
     @extend .text-overflow-ellipsis;
   }

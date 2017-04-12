@@ -6,11 +6,14 @@
       <i class="material-icons tool-icon" (click)="addFolder()">create_new_folder</i>
     </div>
     <div class="dashboard-sidebar__projects" appEventlistener>
-      <div class="dashboard-sidebar__project p-0"
+      <div class="dashboard-sidebar__project p-0" draggable="true"
            *ngFor="let folder of folders | async; let i = index;"
            [ngClass]="'p-' + i" (click)="activateFolder(folder)">
         <h1>{{ folder.name[0] }}</h1>
       </div>
+    </div>
+    <div class="dashboard-sidebar__tool-icons" (dragover)="false" (dragend)="false" (drop)="onDelete($event)">
+      <i class="material-icons tool-icon">delete</i>
     </div>
   </div>
   <div class="dashboard-sidebar__file-list">
