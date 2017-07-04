@@ -1,9 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {AngularFire, FirebaseApp, FirebaseAuthState, FirebaseListObservable} from 'angularfire2';
 import { User, AuthenticationService } from '../authentication.service';
 import {Router} from '@angular/router';
 import {ElectronService} from 'ngx-electron';
 import {Subscription} from "rxjs";
+import {AngularFireDatabase,FirebaseListObservable} from "angularfire2/database";
+import {AngularFireAuth} from "angularfire2/auth";
+import {FirebaseApp} from "angularfire2";
+import 'firebase/storage'; // adds storage functionality to FirebaseApp
+import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 
 export interface Folder {
   name: string;
@@ -34,20 +38,30 @@ export class DashboardComponent implements OnInit {
   folders: FirebaseListObservable<Array<Folder>>;
   files: FirebaseListObservable<Array<File>>;
 
+  public toasterConfig : ToasterConfig;
+
   constructor(
-    private af: AngularFire, @Inject(FirebaseApp) private firebaseApp: any,
+    /*private af: AngularFire,*/private db: AngularFireDatabase,private afAuth: AngularFireAuth, @Inject(FirebaseApp) private firebaseApp: any,
     public authenticationService: AuthenticationService, private router: Router,
-    private electronService: ElectronService
+    private electronService: ElectronService,
+    private toasterService: ToasterService
   ) {
   }
 
   ngOnInit() {
+
+    // info about the config: https://www.npmjs.com/package/angular2-toaster
+    this.toasterConfig = new ToasterConfig({
+      animation: 'flyRight',
+      timeout: 3000
+    });
+
     // check that user is logged in
     if (this.authenticationService.getActiveUser()) {
       // create realtime database list of folders,
       // it updates itself when data is added/removed/updated
-      this.folders = this.af.database.list('/folders/' + this.authenticationService.getActiveUser().uid);
-      this.files = this.af.database.list('/files/' + this.authenticationService.getActiveUser().uid);
+      this.folders = this.db.list('/folders/' + this.authenticationService.getActiveUser().uid);
+      this.files = this.db.list('/files/' + this.authenticationService.getActiveUser().uid);
 
       // set first folder as a active folder
       this.folders.subscribe((res: Array<Folder>) => {
@@ -67,15 +81,6 @@ export class DashboardComponent implements OnInit {
       this.nullAndRedirect();
     }
 
-    // render and main process messaging test
-    console.log(this.electronService.ipcRenderer.sendSync('synchronous-message', 'ping'));
-
-    this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-      console.log(arg); // prints "pong"
-    });
-
-    this.electronService.ipcRenderer.send('asynchronous-message', 'ping');
-
   }
 
   toggleSearch() {
@@ -85,7 +90,7 @@ export class DashboardComponent implements OnInit {
    * Logout the user
    */
   logout() {
-    this.af.auth.logout();
+    this.afAuth.auth.signOut();
     this.nullAndRedirect();
   }
 
@@ -202,23 +207,6 @@ export class DashboardComponent implements OnInit {
       return array;
     });
 
-
-
-
-
-/*    return this.files.subscribe((res: Array<File>) => {
-
-      let array: Array<File> = [];
-
-      for (let file of res) {
-        if (file.folderRefId === this.activeFolder.$key) {
-          array.push(file);
-        }
-      }
-
-      return array;
-
-    });*/
   }
 
   addFolder() {
@@ -239,6 +227,15 @@ export class DashboardComponent implements OnInit {
 
     if (nameExists) {
       // name already exist, inform user about this
+      let toast: Toast = {
+        type: 'warning',
+        title: 'Folder name exists',
+        body: 'Folder name already exists, please select another.',
+        showCloseButton: true
+      };
+
+      this.toasterService.pop(toast);
+
     } else {
       // create folder
       const folder: Folder = {
@@ -250,8 +247,16 @@ export class DashboardComponent implements OnInit {
         console.log(res);
 
       }).catch(error => {
-        // TODO create something  valid here
+
         console.error(error);
+        let toast: Toast = {
+          type: 'error',
+          title: 'Folder creation',
+          body: 'Folder creation failed.',
+          showCloseButton: true
+        };
+
+        this.toasterService.pop(toast);
       });
 
 
@@ -260,6 +265,7 @@ export class DashboardComponent implements OnInit {
   }
 
   downloadFile(file: FbFile) {
+
     const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);
     const fileRef = storageRef.child(file.name);
 
@@ -273,9 +279,26 @@ export class DashboardComponent implements OnInit {
         dl.setAttribute('href', file.path);
         dl.setAttribute('download', file.name);
         dl.click();
+
+        let toast: Toast = {
+          type: 'success',
+          title: 'File download',
+          body: 'File download should start soon.',
+          showCloseButton: true
+        };
+
+        this.toasterService.pop(toast);
+
       } else {
         // integrity is compromised
         // TODO don't let user load this file and inform user about this
+        let toast: Toast = {
+          type: 'warning',
+          title: 'File download',
+          body: 'File\'s integrity is compromised...',
+          showCloseButton: true
+        };
+        this.toasterService.pop(toast);
       }
 
     });
@@ -287,20 +310,38 @@ export class DashboardComponent implements OnInit {
     const storageRef = this.firebaseApp.storage().ref('/' + this.authenticationService.getActiveUser().uid);
     const fileRef = storageRef.child(file.name);
 
+    let deleteError = error => {
+
+      console.error(error);
+
+      let toast: Toast = {
+        type: 'error',
+        title: 'File deletion',
+        body: 'File deletion failed',
+        showCloseButton: true
+      };
+      this.toasterService.pop(toast);
+
+    };
+
     fileRef.delete().then(() => {
 
       // file deleted successfully,
       // next delete database reference
       this.files.remove(file.$key).then(() => {
-        console.log('File deleted successfully');
-      }).catch(error => {
-        console.error(error);
-      });
 
-    }).catch(error => {
-      // TODO inform the user about error
-      console.error(error);
-    });
+        let toast: Toast = {
+          type: 'success',
+          title: 'File deleted',
+          body: 'File deleted successfully',
+          showCloseButton: true
+        };
+
+        this.toasterService.pop(toast);
+
+      }).catch(deleteError);
+
+    }).catch(deleteError);
 
   }
 
