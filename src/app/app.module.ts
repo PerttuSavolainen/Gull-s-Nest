@@ -1,34 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import {AngularFireModule, AuthProviders, AuthMethods} from "angularfire2";
+import {AngularFireModule} from "angularfire2";
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import {AuthenticationService} from "./authentication.service";
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {MdProgressCircleModule} from "@angular2-material/progress-circle";
+import {MdProgressSpinnerModule} from "@angular/material";
 import {NgxElectronModule} from "ngx-electron";
 import { ActiveFilesPipe } from './active-files.pipe';
+import {environment} from "../environments/environment";
+import {ToasterModule} from 'angular2-toaster';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent }
 ];
-
-export const fireBaseConfig = {
-  apiKey: 'AIzaSyCMLXHDso7niqEQFV2XTVChk-PtpJimuaw',
-  authDomain: 'gulls-nest.firebaseapp.com',
-  databaseURL: 'https://gulls-nest.firebaseio.com',
-  storageBucket: 'gulls-nest.appspot.com',
-  messagingSenderId: '995073188328'
-};
-
-const firebaseAuthConfig = {
-  provider: AuthProviders.Google,
-  method: AuthMethods.Redirect
-};
 
 @NgModule({
   declarations: [
@@ -42,9 +34,13 @@ const firebaseAuthConfig = {
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    AngularFireModule.initializeApp(fireBaseConfig, firebaseAuthConfig),
-    MdProgressCircleModule,
-    NgxElectronModule
+    AngularFireModule.initializeApp(environment.fireBase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    MdProgressSpinnerModule,
+    NgxElectronModule,
+    ToasterModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthenticationService],
   bootstrap: [AppComponent]

@@ -38,3 +38,7 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+# debug files
+npm-debug.log
+npm-debug.log.*
