@@ -1,8 +1,9 @@
 <section class="login-page">
+  <!-- Logo -->
   <div class="login-page__logo_image">
-
-    <svg class="login-page__logo_svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	  viewBox="0 0 90 90.7" style="enable-background:new 0 0 90 90.7;" xml:space="preserve">
+    <svg class="login-page__logo_svg" version="1.1" id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px" y="0px" viewBox="0 0 90 90.7" style="enable-background:new 0 0 90 90.7;" xml:space="preserve">
       <g>
         <polygon class="st0" points="15.2,34.8 35.2,14.8 55.2,14.8 75.2,35.1 75.2,54.8 55.2,74.9 35.2,74.9 15.2,54.8 	"/>
         <line class="st0" x1="48.1" y1="1.9" x2="35.2" y2="14.8"/>
@@ -25,20 +26,15 @@
       </g>
       <rect x="0" y="0.7" class="st1" width="90" height="90"/>
     </svg>
-
     <h1 class="login-page__logo_text">Gull's Nest</h1>
-
   </div>
+  <!-- Login -->
   <div [ngSwitch]="isLoading">
-
     <div *ngSwitchCase="true">
-      <div style="text-align: center">
-        <md-spinner mode="indeterminate"></md-spinner>
-      </div>
+      <md-spinner mode="indeterminate"></md-spinner>
     </div>
     <div *ngSwitchDefault class="login-page__button" (click)="login()">
       <p class="login-page__button_text">Login with <b>Google</b></p>
     </div>
-
   </div>
 </section>

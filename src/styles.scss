@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 @import '../node_modules/angular2-toaster/toaster';
 @import "app/theme/variables";
 
@@ -7,3 +8,29 @@ body {
   background-color: $color-grey;
   margin: 0;
 }
+
+md-spinner {
+  margin: 0 auto;
+
+  &.mat-spinner {
+
+    width: 3rem;
+    height: 3rem;
+
+    path {
+      stroke: $color-blue;
+      animation: stroke-color-fade 2s linear infinite alternate;
+    }
+  }
+
+}
+
+@keyframes stroke-color-fade {
+  from {
+    stroke: $color-blue;
+  }
+  to {
+    stroke: $color-violet;
+  }
+}
+
